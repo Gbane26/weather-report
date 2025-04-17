@@ -31,20 +31,39 @@ public class WeatherReportController {
 
     // Obtenir des rapports météo à proximité
     @GetMapping("/nearby")
-    public ResponseEntity<List<WeatherReport>> getNearbyReports(
-            @RequestParam double lat,
-            @RequestParam double lon,
-            @RequestParam double radiusKm
-    ) {
+    public ResponseEntity<String> getNearbyWeather(
+            @RequestParam String lat,
+            @RequestParam String lon,
+            @RequestParam String radiusKm) {
+
         try {
-            List<WeatherReport> reports = service.getReportsNear(lat, lon, radiusKm);
+            // Conversion des chaînes de caractères en Double
+            double latitude = Double.parseDouble(lat);
+            double longitude = Double.parseDouble(lon);
+            double radius = Double.parseDouble(radiusKm);
+
+            // Si la conversion réussit, tu peux utiliser ces valeurs
+            // Effectuer une logique avec latitude, longitude et radius
+            return ResponseEntity.ok("Lat: " + latitude + ", Lon: " + longitude + ", Radius: " + radius);
+
+        } catch (NumberFormatException e) {
+            // Si une exception est lancée, cela signifie que la chaîne n'est pas un nombre valide
+            return ResponseEntity.badRequest().body("Erreur : La chaîne n'est pas un nombre valide. Détails de l'erreur : " + e.getMessage());
+        }
+    }
+
+    // Obtenir tous les rapports météo
+    @GetMapping("/all")
+    public ResponseEntity<List<WeatherReport>> getAllReports() {
+        try {
+            List<WeatherReport> reports = service.getAllReports(); // suppose que le service a cette méthode
             if (reports.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Aucun rapport trouvé
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Renvoie un code 204 si aucun rapport n'est trouvé
             }
             return new ResponseEntity<>(reports, HttpStatus.OK);
         } catch (Exception e) {
-            // Gestion des erreurs (par exemple, mauvaise requête)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Renvoie un code 500 si une erreur survient
         }
     }
 }

@@ -25,4 +25,10 @@ public class WeatherReportServiceImpl implements WeatherReportService {
     public List<WeatherReport> getReportsNear(double lat, double lon, double radiusKm) {
         return dao.findByLocationAndDate(lat, lon, radiusKm);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<WeatherReport> getAllReports() {
+        return dao.findAll();  // Utilisation de la méthode findAll() pour récupérer tous les rapports
+    }
 }

@@ -6,4 +6,5 @@ import java.util.List;
 public interface WeatherReportService {
     void addReport(WeatherReport report);
     List<WeatherReport> getReportsNear(double lat, double lon, double radiusKm);
+    List<WeatherReport> getAllReports();
 }
