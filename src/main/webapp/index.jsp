@@ -134,23 +134,24 @@
             return;
         }
 
-        fetch(`/weather-report/api/weather/nearby?lat=${lat}&lon=${lng}&radiusKm=${radius}`)
+        fetch(`/weather-report/api/weather/nearby?lat=`+lat+`&lon=`+lng+`&radiusKm=`+radius)
             .then(res => res.json())
             .then(data => populateTable(data))
-            .catch(() => alert("❌ Impossible de récupérer les rapports proches."));
+            .catch((error) => alert("❌ Impossible de récupérer les rapports proches.", error));
     });
 
     // Affichage dans la table
     function populateTable(data) {
+        console.log('Les données retournés sont vides', data)
         reportTableBody.innerHTML = data.length === 0 
             ? '<tr><td colspan="5" class="text-center text-muted">Aucun rapport trouvé</td></tr>'
             : data.map(report => `
                 <tr>
-                    <td>${report.latitude}</td>
-                    <td>${report.longitude}</td>
-                    <td>${report.condition}</td>
-                    <td>${report.temperature}</td>
-                    <td>${report.timestamp}</td>
+                    <td>`+report.latitude+`</td> 
+                    <td>`+report.longitude+`</td>
+                    <td>`+report.condition+`</td>
+                    <td>`+report.temperature+`</td>
+                    <td>`+report.timestamp+`</td>
                 </tr>
             `).join('');
     }
